@@ -1,6 +1,8 @@
 def hola(num_repeticiones):
-    for i in range(num_repeticiones):
-        print("hola")
+    cadena = "hola\n"*num_repeticiones
+    cadena = cadena[:-1]
+
+    return cadena
 
 numero = int(input("Introducir el numero de repeticiones: "))
-hola(numero)
+print(hola(numero))

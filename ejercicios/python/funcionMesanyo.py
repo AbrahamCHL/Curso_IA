@@ -1,16 +1,12 @@
 def determinarMes(numero_mes):
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio","Julio","Agosto","Septiembre", "Octubre", "Noviembre", "Diciembre"]
-    encontrado = False
-    for i in range(len(meses)):
-        if i == numero_mes-1:
-            print("El mes es: "+meses[numero_mes-1])
-            encontrado = True
-  
-    if encontrado==False:
-        print("El numero de mes es incorrecto")
-
-
+    mes = ""
+    mes = meses[numero_mes-1]
+    return mes
 
 
 numeroMes = int(input("Introducir numero del mes: "))
-determinarMes(numeroMes)
+if numeroMes >= 1 and numeroMes <= 12:
+    print(determinarMes(numeroMes))
+else:
+    print("Numero de mes incorrecto")
