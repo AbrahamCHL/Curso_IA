@@ -1,13 +1,16 @@
 class Perro:
-    def __init__(self, pNombre):
-        self.nombre = pNombre
-
-    def DecirNombre(self):
-        print("Mi nombre es: "+ self.nombre)
+    def __init__(self,pNombre):
+        self.__nombre = pNombre
     
-    def probando(self):
-        print("QUe paso")
+   
+    def SetNombre(self, pNombre):
+        self.__nombre = pNombre
 
-perro1 = Perro("Pascual")
-perro1.DecirNombre()
-perro1.probando()
+    def GetNombre(self):
+        return self.__nombre
+
+perro1 = Perro("")
+perro1.SetNombre("COS")
+print(perro1.GetNombre())
+
+
