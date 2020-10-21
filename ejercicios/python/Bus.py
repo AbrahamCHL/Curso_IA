@@ -1,13 +1,13 @@
 class Bus():
     def __init__(self,numeroPlazas):
-        self.numeroplazas = numeroPlazas
-        self.plazas_disponibles = numeroPlazas
+        self.__numeroplazas = numeroPlazas
+        self.__plazas_disponibles = numeroPlazas
 
     def getNumeroPlazas(self):
-        return self.numeroplazas
+        return self.__numeroplazas
 
     def getPlazasDisponibles(self):
-        return self.plazas_disponibles
+        return self.__plazas_disponibles
     
     def ventaDeBilletes(self,billetesAcomprar):
         ventacorrecta = False
@@ -16,7 +16,7 @@ class Bus():
             pass
         
         else:
-            self.plazas_disponibles -= billetesAcomprar
+            self.__plazas_disponibles -= billetesAcomprar
             ventacorrecta = True
 
         return ventacorrecta
@@ -28,12 +28,11 @@ class Bus():
             pass
         
         else:
-            self.plazas_disponibles += BilletesADevolver
+            self.__plazas_disponibles += BilletesADevolver
             devolucioncorrecta = True
         return devolucioncorrecta
     
     def billetesVendidos(self):
-        self.billetes_vendidos = self.getNumeroPlazas() - self.getPlazasDisponibles()
-        return self.billetes_vendidos
+        return self.getNumeroPlazas() - self.getPlazasDisponibles()
 
 

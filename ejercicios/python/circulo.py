@@ -1,8 +1,12 @@
+from Cordenada import Cordenada
+
 from math import pi
 
 class Circulo:
-    def __init__(self, radio):
+    def __init__(self, radio, cordenadaX, cordenadaY):
         self.Setradio(radio)
+        self.cordenadaCirculo = Cordenada(cordenadaX, cordenadaY)
+
 
     def Setradio(self,radio):
         self.radio = radio

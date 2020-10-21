@@ -3,7 +3,6 @@ from Bus import Bus
 numero_plazas = int(input("Introducir numeros de plazas: "))
 if numero_plazas > 0:
     bus1 = Bus(numero_plazas)
-
     opcion = 6
 
     while opcion != 0:

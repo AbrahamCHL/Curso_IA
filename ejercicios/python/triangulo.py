@@ -1,7 +1,12 @@
+from Cordenada import Cordenada
+
+
 class Triangulo:
-    def __init__(self, base, altura):
+    def __init__(self, base, altura, cordenadaX, cordenadaY):
         self.Setbase(base)
         self.Setaltura(altura)
+        self.cordenadaTriangulo = Cordenada(cordenadaX, cordenadaY)
+
 
     def Setbase(self,base):
         self.base = base

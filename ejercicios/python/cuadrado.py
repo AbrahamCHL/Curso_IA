@@ -1,7 +1,11 @@
+from Cordenada import Cordenada
+
 class Cuadrado:
     
-    def __init__(self,base):
+    def __init__(self,base, cordenada):
         self.Setbase(base)
+        self.cordenadaCuadrado = cordenada
+
 
     def Setbase(self,base):
         self.base = base
