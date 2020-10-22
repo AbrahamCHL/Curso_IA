@@ -15,6 +15,7 @@ while opcion!=4:
         if not buses:
             print("No hay buses")
         else:
+            print("Hay: "+str(len(buses)))
             posicion = int(input("Introducir el numero del bus que quiere visualizar: "))
             if posicion < len(buses):
                 opc = 0
@@ -50,8 +51,13 @@ while opcion!=4:
         if not buses:
             print("No hay buses")
         else:
-            pass
-
+            print("Hay: "+str(len(buses)))
+            posicion = int(input("Introducir el numero del bus que quiere eliminar: "))
+            if posicion < len(buses):
+                buses.pop(posicion)
+                print("Bus eliminado correctamente")
+            else:
+                print("Esa posicion de bus no existe")
     else:
         print("Introducir una opción correcta")
 
