@@ -17,7 +17,6 @@ cur = conn.cursor()
 cur.execute("""SELECT col1, col2, col3 FROM public.hola""")
 query_results = cur.fetchall()
 print(query_results)
-x = 5
 label = Label(root, text= query_results)
 label.pack() 
 

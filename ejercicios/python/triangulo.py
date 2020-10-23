@@ -1,25 +1,24 @@
-from Cordenada import Cordenada
+from Figura import Figura
 
-
-class Triangulo:
-    def __init__(self, base, altura, cordenadaX, cordenadaY):
+class Triangulo(Figura):
+    def __init__(self, base, altura, coordenada):
         self.Setbase(base)
         self.Setaltura(altura)
-        self.cordenadaTriangulo = Cordenada(cordenadaX, cordenadaY)
+        Figura.__init__(self,coordenada)
 
 
     def Setbase(self,base):
-        self.base = base
+        self.__base = base
 
     def Setaltura(self,altura):
-        self.altura = altura
+        self.__altura = altura
 
     def Getbase(self):
-        return self.base
+        return self.__base
 
     def Getaltura(self):
-        return self.altura
+        return self.__altura
 
     def calcularSuperficie(self):
-        self.superficie = self.Getbase() * (self.Getaltura() / 2)
-        return self.superficie
+        self.__superficie = self.Getbase() * (self.Getaltura() / 2)
+        return self.__superficie

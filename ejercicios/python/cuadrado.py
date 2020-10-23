@@ -1,18 +1,17 @@
-from Cordenada import Cordenada
+from Figura import Figura
 
-class Cuadrado:
+class Cuadrado(Figura):
     
-    def __init__(self,base, cordenada):
+    def __init__(self,base, coordenada):
         self.Setbase(base)
-        self.cordenadaCuadrado = cordenada
-
+        Figura.__init__(self,coordenada)
 
     def Setbase(self,base):
-        self.base = base
+        self.__base = base
 
     def Getbase(self):
-        return self.base
+        return self.__base
 
     def calcularSuperficie(self):
-        self.superficie = self.Getbase()**2
-        return self.superficie
+        self.__superficie = self.Getbase()**2
+        return self.__superficie

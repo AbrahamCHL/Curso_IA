@@ -1,19 +1,19 @@
-from Cordenada import Cordenada
+from Figura import Figura
 
 from math import pi
 
-class Circulo:
-    def __init__(self, radio, cordenadaX, cordenadaY):
+class Circulo(Figura):
+    def __init__(self, radio, coordenada):
         self.Setradio(radio)
-        self.cordenadaCirculo = Cordenada(cordenadaX, cordenadaY)
+        Figura.__init__(self,coordenada)
 
 
     def Setradio(self,radio):
-        self.radio = radio
+        self.__radio = radio
 
     def Getradio(self):
-        return self.radio
+        return self.__radio
 
     def calcularSuperficie(self):
-        self.superficie = pi*self.Getradio()**2
-        return self.superficie
+        self.__superficie = pi*self.Getradio()**2
+        return self.__superficie
