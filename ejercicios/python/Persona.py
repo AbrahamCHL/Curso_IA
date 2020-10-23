@@ -3,5 +3,5 @@ class Persona:
         self.nombre = nombre
         self.apellido = apellido
     
-    def Nombre(self):
+    def __str__(self):
         return self.nombre + " "+ self.apellido

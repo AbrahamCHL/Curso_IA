@@ -24,7 +24,7 @@ while opc!=4:
             print(cuadrado1.coordenada.GetX())
             print(cuadrado1.coordenada.GetY())
             
-            print("La superficie es: "+str(cuadrado1.calcularSuperficie()))
+            print(f"La superficie es: {cuadrado1.calcularSuperficie()}")
         
     elif opc == 2:
         base = int(input("Introducir base del triangulo: "))

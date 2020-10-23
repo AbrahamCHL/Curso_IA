@@ -6,12 +6,12 @@ class Empleado(Persona):
         Persona.__init__(self,nombre,apellido)
         self.numero = numero
 
-    def GetEmpleado(self):
-        return self.Nombre() + ", "+self.numero
+    def __str__(self):
+        return super().__str__() + ", "+self.numero
 
 
 persona = Persona("Juan", "Pérez")
 empleado = Empleado("Lucas", "Ramirez", "1007")
 
-print(persona.Nombre())
-print(empleado.GetEmpleado())
+print(persona.__str__())
+print(empleado.__str__())
