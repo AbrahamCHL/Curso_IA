@@ -1,18 +1,9 @@
 import psycopg2
+from Postgres import Postgres
 
-conn = psycopg2.connect(host="localhost", port = 5432, database="postgres", user="admin", password="admin")
-cur = conn.cursor()
+postgres = Postgres()
 
-sql ="""CREATE TABLE IF NOT EXISTS public.bus 
-(
-    ID SERIAL PRIMARY KEY,
-    NUMERO_PLAZAS integer NOT NULL,
-    PLAZAS_DISPONIBLES integer,
-    PLAZAS_VENDIDAS integer
-)"""
-
-cur.execute(sql)
-conn.commit()
+postgres.createTable('bus')
 
 opcion = 0
 while opcion!=5:
@@ -21,23 +12,13 @@ while opcion!=5:
     if opcion == 1:
         numero_plazas = int(input("Introducir numeros de plazas: "))
         if numero_plazas > 0:
-            sql = """INSERT INTO public.bus(
-                numero_plazas, plazas_disponibles, plazas_vendidas)
-                VALUES (%s,%s,%s)"""
-            cur.execute(sql, (numero_plazas,numero_plazas,0))
-            conn.commit()
+            postgres.insert(numero_plazas)
         else:
             print("Introducir un numero de plazas correcto")
     elif opcion == 2: 
         idBusAvisualizar = int(input("Introducir el id del bus que quiere visualizar: "))
-        sql ="""SELECT id, numero_plazas, plazas_disponibles, plazas_vendidas
-	    FROM public.bus WHERE id = %s"""
-        cur.execute(sql,(idBusAvisualizar,))
-        query_results = cur.fetchall()
-        numeroPlazas = query_results[0][1]
-        plazasDisponibles = query_results[0][2]
-        plazasVendidas = query_results[0][3]
-        
+        numeroPlazas, plazasDisponibles, plazasVendidas = postgres.selectSoloUno(idBusAvisualizar)
+
         opc = 0
         while opc != 4:
             print("Menu\n1-Venda de billets\n2-Devolucio de billets\n3-Estat de la venda\n4-Sortir")
@@ -50,11 +31,7 @@ while opcion!=5:
                     plazasDisponibles -= demanda
                     print(f"Venta correcta, quedan: {plazasDisponibles}")
                     plazasVendidas = numeroPlazas - plazasDisponibles
-                    sql = """UPDATE public.bus SET plazas_disponibles = (%s),
-                        plazas_vendidas = (%s) WHERE id = (%s)""" 
-                    cur.execute(sql, (plazasDisponibles,plazasVendidas,idBusAvisualizar))
-                    conn.commit()
-
+                    postgres.update(plazasDisponibles,plazasVendidas,idBusAvisualizar)
 
             elif opc == 2:
                 devolucion_billetes = int(input("Introduzca la cantidad de billetes a devolver: "))
@@ -64,10 +41,7 @@ while opcion!=5:
                     plazasDisponibles += devolucion_billetes
                     plazasVendidas = numeroPlazas - plazasDisponibles
                     print(f"Devolución correcta, el número de plazas disponibles es: {plazasDisponibles}")
-                    sql = """UPDATE public.bus SET plazas_disponibles = (%s),
-                        plazas_vendidas = (%s) WHERE id = (%s)""" 
-                    cur.execute(sql, (plazasDisponibles,plazasVendidas,idBusAvisualizar))
-                    conn.commit()
+                    postgres.update(plazasDisponibles,plazasVendidas,idBusAvisualizar)
                 
         
             elif opc == 3:
@@ -79,19 +53,13 @@ while opcion!=5:
                       
     elif opcion == 3:
         idAborrar = int(input("Introducir el id del bus que quiere borrar: ")) 
-        sql ="""DELETE FROM public.bus WHERE id = %s"""
-        cur.execute(sql,(idAborrar,))
-        conn.commit()
+        postgres.delete(idAborrar)
+
     elif opcion == 4:
-        sql ="""SELECT id, numero_plazas, plazas_disponibles, plazas_vendidas
-	    FROM public.bus """
-        cur.execute(sql)
-        query_results = cur.fetchall()
-        print(query_results)
+        print(postgres.selectTodo())
        
     else:
         print("Introducir una opción correcta")
 
 
-cur.close()
-conn.close()
+postgres.closeConection()
