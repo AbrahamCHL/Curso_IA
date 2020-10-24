@@ -1,4 +1,3 @@
-import psycopg2
 from Postgres import Postgres
 
 postgres = Postgres()

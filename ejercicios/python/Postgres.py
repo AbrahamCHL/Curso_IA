@@ -16,7 +16,6 @@ class Postgres():
             )""".format(nameTable)
         self.__cur.execute(sql)
         self.commit()
-        # self.closeConection()
         
     def insert(self,numeroPlazas):
         sql = """INSERT INTO public.bus(
@@ -24,7 +23,6 @@ class Postgres():
             VALUES (%s,%s,%s)"""
         self.__cur.execute(sql, (numeroPlazas,numeroPlazas,0))
         self.commit()
-        # self.closeConection()
 
     def selectSoloUno(self,id):
         sql ="""SELECT id, numero_plazas, plazas_disponibles, plazas_vendidas
@@ -51,7 +49,7 @@ class Postgres():
         self.commit()
     
     def delete(self,id):
-        psql ="""DELETE FROM public.bus WHERE id = %s"""
+        sql ="""DELETE FROM public.bus WHERE id = %s"""
         self.__cur.execute(sql,(id,))
 
     def closeConection(self):
