@@ -2,7 +2,6 @@ from Postgres import Postgres
 
 postgres = Postgres()
 
-print("Loco Bryan")
 sql ="""CREATE TABLE IF NOT EXISTS public.{}
     (
         ID SERIAL PRIMARY KEY,
