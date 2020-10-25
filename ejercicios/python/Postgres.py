@@ -8,11 +8,9 @@ class Postgres():
 
     def createTable(self,_sql):
         self.__cur.execute(_sql)
-        # self.commit()
         
     def insert(self,_sql, _numeroPlazas):
         self.__cur.execute(_sql, (_numeroPlazas,_numeroPlazas,0))
-        # self.commit()
 
     def selectSoloUno(self,_sql, _id):
         self.__cur.execute(_sql,(_id,))
@@ -34,12 +32,10 @@ class Postgres():
     def update(self,_sql,plazas_disponibles,plazas_vendidas,id):
         
         self.__cur.execute(_sql, (plazas_disponibles,plazas_vendidas,id))
-        # self.commit()
     
     def delete(self,_sql,_id):
        
         self.__cur.execute(_sql,(_id,))
-        # self.commit()
 
     def closeConection(self):
         self.__cur.close()
