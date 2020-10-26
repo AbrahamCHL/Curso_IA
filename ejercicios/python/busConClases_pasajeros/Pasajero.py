@@ -5,7 +5,7 @@ class Pasajero():
         self.__apellido = _apellido
         self.__direccion = _direccion
         self.__dni = _dni
-        self.__listaBuses = []
+        self.__billetesComprados = 0
 
     def getNombre(self):
         return self.__nombre
@@ -21,23 +21,14 @@ class Pasajero():
 
     def getBilletesComprados(self):
         return self.__billetesComprados
+    
 
-    def comprarBilletes(self, _billetesAcomprar, plazasDisponibles,bus):
-        compra = False
-        if plazasDisponibles >= _billetesAcomprar:
-            self.__billetesComprados = _billetesAcomprar
-            
-            compra = True
-        else:
-            compra = False
-        self.__listaBuses.append(bus)
-        return compra
+    def comprarBilletes(self,_billetesComprados):
+        self.__billetesComprados = _billetesComprados
+
     
     def devolverBillete(self,_billetesADevolver):
-
-        if(_billetesADevolver <= self.getBilletesComprados()):
-            self.__billetesComprados -= _billetesADevolver
+        self.__billetesComprados -= _billetesADevolver
+        
     
-    def getListaBuses(self):
-        return self.__listaBuses
 

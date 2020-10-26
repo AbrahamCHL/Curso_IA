@@ -1,11 +1,8 @@
-from Pasajero import Pasajero
-
 class Bus():
     def __init__(self,numeroPlazas):
         self.__numeroplazas = numeroPlazas
         self.__plazas_disponibles = numeroPlazas
         self.__listaPasajeros = []
-
 
     def getNumeroPlazas(self):
         return self.__numeroplazas
