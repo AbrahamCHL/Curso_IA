@@ -1,6 +1,7 @@
 from Bus import Bus 
 from Pasajero import Pasajero
 
+
 def accionesPasajero(pasajero, buses):
     opcion = 0
     while opcion != 4:
@@ -119,8 +120,3 @@ def menuBus(buses):
         else:
             print("Introducir una opción correcta")
 
-
-
-def venderBillete(pasajero):
-    billetes = int(input("Billetes a comprar: "))
-    pasajero.comprarBilletes(billetes)
