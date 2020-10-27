@@ -2,7 +2,7 @@ from Bus import Bus
 from Pasajero import Pasajero
 
 
-def accionesPasajero(pasajero, buses):
+def accionesPasajero(pasajero, buses, posicionPasajero):
     opcion = 0
     while opcion != 4:
         print("Menu\n1-Comprar billetes\n2-Devolver billetes\n3-Estado del pasajero\n4-Sortir")
@@ -17,7 +17,7 @@ def accionesPasajero(pasajero, buses):
             if posicion <= len(buses) and posicion >0:
                 demanda = int(input("Introduzca la cantidad de billetes que quiere comprar: "))
                 if buses[posicion - 1].ventaDeBilletes(demanda) == True:
-                    # buses[posicion - 1].insertPasajero(pasajero)
+                    buses[posicion - 1].insertPasajero(pasajero)
                     if posicion in pasajero.getBilletesComprados():
                         pasajero.sumarBilletes(posicion,demanda)
                     else:
@@ -41,6 +41,7 @@ def accionesPasajero(pasajero, buses):
                             pasajero.restarBilletes(posicion,devolucion_billetes)
                             if pasajero.getUnaPosicionDelDicBilletes(posicion) == 0:
                                 pasajero.eliminarPosicionBilletes(posicion)
+                                buses[posicion - 1].eliminarPasajero(posicionPasajero)
                                 
                             print(f"Devolución correcta, en el bus hay disponibles: {buses[posicion - 1].getPlazasDisponibles()} plazas")
                         else:
@@ -83,16 +84,23 @@ def menuPasajero(pasajeros,buses):
             if not pasajeros:
                 print("No hay pasajeros")
             else:
+                dni_encontrado = False
                 print(f"Hay: {len(pasajeros)}")
-                posicion = int(input("Introducir el numero del pasajero que quiere visualizar: "))
-                if posicion <= len(pasajeros) and posicion>0:
+                dni = input("Introducir el dni del pasajero: ")
+                for x in range(len(pasajeros)):
+                    if dni == pasajeros[x].getDni():
+                        posicion = x
+                        dni_encontrado = True
+
+                if dni_encontrado == True:
                     if not buses:
                         print("No hay ningun bus")
                     else:
-                        accionesPasajero(pasajeros[posicion-1],buses)
+                        accionesPasajero(pasajeros[posicion],buses, posicion)
                 else:
-                    print("Esa posicion de pasajero no existe")
-
+                    print("Error, el dni no existe")
+                    
+        
         elif opcion==3:
             if not pasajeros:
                 print("No hay pasajeros")
@@ -136,7 +144,11 @@ def menuBus(buses):
                     print(f"El número de plazas disponibles es de: {buses[posicion  -  1].getPlazasDisponibles()}")
                     print(f"El número de plazas máximo es de: {buses[posicion  -  1].getNumeroPlazas()}")
                     print(f"El número de plazas vendidas es de:{buses[posicion  -  1].billetesVendidos()}")
-                    # print(f"El número de pasajeros que han comprado billetes a su nombre es: {buses[posicion - 1].getPasajeros()}")
+                    if not buses[posicion - 1].getPasajeros():
+                        print("No ha habido ventas")
+                    else:
+                        for x in range(len(buses[posicion - 1].getPasajeros())):
+                            print(f"EL dni del pasajero es: {buses[posicion - 1].getPasajeros()[x].getDni()}")
                 else:
                     print("Introducir una posicion correcta")
         elif opcion == 3:

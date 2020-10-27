@@ -5,7 +5,7 @@ class Bus():
             raise Exception("Ha ingresado un numero de plazas negativo, porfavor ingrese un numero positivo")
         self.__numeroplazas = numeroPlazas
         self.__plazas_disponibles = numeroPlazas
-        # self.__listaPasajeros = []
+        self.__lista_pasajeros = []
 
     def getNumeroPlazas(self):
         return self.__numeroplazas
@@ -25,8 +25,11 @@ class Bus():
 
         return ventacorrecta
 
-    # def insertPasajero(self,pasajero):
-    #     self.__listaPasajeros.append(pasajero)
+    def insertPasajero(self,_pasajero):
+        self.__lista_pasajeros.append(_pasajero)
+
+    def eliminarPasajero(self,_posicion):
+        self.__lista_pasajeros.pop(_posicion)
 
     def devolucion(self,BilletesADevolver):
         devolucioncorrecta = False
@@ -42,5 +45,5 @@ class Bus():
     def billetesVendidos(self):
         return self.getNumeroPlazas() - self.getPlazasDisponibles()
 
-    # def getPasajeros(self):
-    #     return len(self.__listaPasajeros)
+    def getPasajeros(self):
+        return self.__lista_pasajeros
