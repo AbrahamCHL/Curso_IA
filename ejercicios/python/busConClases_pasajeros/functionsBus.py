@@ -16,7 +16,7 @@ def accionesPasajero(pasajero, buses, posicionPasajero):
             else:
                 print(f"Total de buses: {len(buses)}")
                 for x in range(len(buses)):
-                    print(buses[x].getNombre())
+                    print(f"Bus: {buses[x].getNombre()}")
                 
                 nombreBus_encontrado = False
                 nombreBus = input("Introduzca el nombre del bus donde quiere comprar: ")
