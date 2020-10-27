@@ -19,7 +19,7 @@ def accionesPasajero(pasajero, buses, posicionPasajero):
                 for x in range(len(buses)):
                     if nombreBus == buses[x].getNombre():
                         posicion = x
-                        dni_encontrado = True
+                        nombreBus_encontrado = True
 
                 if nombreBus_encontrado == True:
             
@@ -46,12 +46,13 @@ def accionesPasajero(pasajero, buses, posicionPasajero):
                 for x in range(len(buses)):
                     if nombreBus == buses[x].getNombre():
                         posicion = x
-                        dni_encontrado = True
+                        nombreBus_encontrado = True
+
                 if nombreBus_encontrado == True:
                     if nombreBus in pasajero.getBilletesComprados():
                         devolucion_billetes = int(input("Introduzca la cantidad de billetes a devolver: "))
                         if buses[posicion].devolucion(devolucion_billetes) == True and devolucion_billetes <= pasajero.getUnaPosicionDelDicBilletes(nombreBus):
-                            pasajero.restarBilletes(posicion,devolucion_billetes)
+                            pasajero.restarBilletes(nombreBus,devolucion_billetes)
                             if pasajero.getUnaPosicionDelDicBilletes(nombreBus) == 0:
                                 pasajero.eliminarPosicionBilletes(nombreBus)
                                 buses[posicion].eliminarPasajero(posicionPasajero)
@@ -89,7 +90,17 @@ def menuPasajero(pasajeros,buses):
             apellido = input("Introducir apellido: ")
             direccion = input("Introducir la direccion: ")
             dni = input("Introducir el dni: ")
-            pasajeros.append(Pasajero(nombre,apellido,direccion,dni))
+            existe_dni = False
+            for x in range(len(pasajeros)):
+                if dni == pasajeros[x].getDni():
+                    existe_dni = True
+            if existe_dni == True:
+                
+                print("Este dni ya existe en nuestra lista de pasajeros")
+            else:
+                pasajeros.append(Pasajero(nombre,apellido,direccion,dni))
+                    
+            
             
         elif opcion==2:
             if not pasajeros:
@@ -114,13 +125,21 @@ def menuPasajero(pasajeros,buses):
             if not pasajeros:
                 print("No hay pasajeros")
             else:
+                dni_encontrado = False
                 print(f"Hay: {len(pasajeros)}")
-                posicion = int(input("Introducir el numero del pasajero que quiere eliminar: "))
-                if posicion <= len(pasajeros) and posicion>0:
-                    pasajeros.pop(posicion - 1)
-                    print("Pasajero eliminado correctamente")
+                dni = input("Introducir el dni del pasajero que quiere borrar: ")
+                for x in range(len(pasajeros)):
+                    if dni == pasajeros[x].getDni():
+                        posicion = x
+                        dni_encontrado = True
+
+                if dni_encontrado == True:
+                    
+                    pasajeros.pop(posicion)
+                    print("Pasajero borrado correctamente")
                 else:
-                    print("Esa posicion de pasajero no existe")
+                    print("Error, el dni no existe")
+                    
         else:
             print("Opcion no valida, introduzca una opcion correcta")
 
@@ -135,14 +154,9 @@ def menuBus(buses):
             print("Opción no valida")
         if opcion == 1:
             nombre_existe = False
-            try:
-                nombre = input("Introducir nombre del bus: ")
-            except ValueError:
-                print("Nombre no valido")
-            
+            nombre = input("Introducir nombre del bus: ")
             for x in range(len(buses)):
                 if nombre == buses[x].getNombre():
-                    posicion = x
                     nombre_existe = True
             
             if nombre_existe == False:
@@ -151,39 +165,52 @@ def menuBus(buses):
                     buses.append(Bus(numero_plazas, nombre))
                 except Exception as ex:
                     print("Ha ingresado un numero de plazas negativo, porfavor ingrese un numero positivo")
-            
+            else:
+                print("Este nombre de bus ya existe ingrese otro")
             
                 
-            # else:
-                # print("Introducir un numero de plazas correcto")
         elif opcion == 2:
             if not buses:
                 print("No hay buses")
             else:
+                nombre_existe = False
                 print(f"Hay: {len(buses)}")
-                posicion = int(input("Introducir el numero del bus que quiere visualizar: "))
-                if posicion <= len(buses) and posicion>0:
-                    print(f"El número de plazas disponibles es de: {buses[posicion  -  1].getPlazasDisponibles()}")
-                    print(f"El número de plazas máximo es de: {buses[posicion  -  1].getNumeroPlazas()}")
-                    print(f"El número de plazas vendidas es de:{buses[posicion  -  1].billetesVendidos()}")
-                    if not buses[posicion - 1].getPasajeros():
+                nombreBus = input("Introducir nombre del bus que quiere ver: ")
+                for x in range(len(buses)):
+                    if nombreBus == buses[x].getNombre():
+                        posicion = x
+                        nombre_existe = True
+                if nombre_existe == True:
+                    
+                    print(f"El número de plazas disponibles es de: {buses[posicion].getPlazasDisponibles()}")
+                    print(f"El número de plazas máximo es de: {buses[posicion].getNumeroPlazas()}")
+                    print(f"El número de plazas vendidas es de:{buses[posicion].billetesVendidos()}")
+                    if not buses[posicion].getPasajeros():
                         print("No ha habido ventas")
                     else:
-                        for x in range(len(buses[posicion - 1].getPasajeros())):
-                            print(f"EL dni del pasajero es: {buses[posicion - 1].getPasajeros()[x].getDni()}")
+                        print(f"El total de pasajeros es: {len(buses[posicion].getPasajeros())}")
+                        for x in range(len(buses[posicion].getPasajeros())):
+                            print(f"EL dni del pasajero es: {buses[posicion].getPasajeros()[x].getDni()}")
                 else:
-                    print("Introducir una posicion correcta")
+                    print("Este nombre de bus no existe")
+                
         elif opcion == 3:
             if not buses:
                 print("No hay buses")
             else:
+                nombre_existe = False
                 print(f"Hay: {len(buses)}")
-                posicion = int(input("Introducir el numero del bus que quiere eliminar: "))
-                if posicion <= len(buses) and posicion>0:
-                    buses.pop(posicion - 1)
-                    print("Bus eliminado correctamente")
+                nombreBus = input("Introducir nombre del bus que quiere borrar: ")
+                for x in range(len(buses)):
+                    if nombreBus == buses[x].getNombre():
+                        posicion = x
+                        nombre_existe = True
+
+                if nombre_existe == True:
+                    buses.pop(posicion)
+                    print("Bus borrado correctamente")
                 else:
-                    print("Esa posicion de bus no existe")
+                    print("Este nombre de bus no existe")
         else:
             print("Introducir una opción correcta")
 
