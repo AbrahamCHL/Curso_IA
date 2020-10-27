@@ -14,8 +14,11 @@ def accionesPasajero(pasajero, buses):
             if posicion <= len(buses) and posicion >0:
                 demanda = int(input("Introduzca la cantidad de billetes que quiere comprar: "))
                 if buses[posicion - 1].ventaDeBilletes(demanda) == True:
-                    buses[posicion - 1].insertPasajero(pasajero)
-                    pasajero.comprarBilletes(demanda)
+                    # buses[posicion - 1].insertPasajero(pasajero)
+                    if posicion in pasajero.getBilletesComprados():
+                        pasajero.sumarBilletes(posicion,demanda)
+                    else:
+                        pasajero.insertarBilletes(posicion, demanda)
                     print(f"Venta correcta, hay disponibles: {buses[posicion - 1].getPlazasDisponibles()}")
                 else:
                     print(f"Venta incorrecta, no disponemos de plazas suficientes, quedan: {buses[posicion  -  1].getPlazasDisponibles()}")
@@ -23,20 +26,34 @@ def accionesPasajero(pasajero, buses):
                 print("Se ha introducido un bus inexistente.")
 
         elif opcion == 2:
-            devolucion_billetes = int(input("Introduzca la cantidad de billetes a devolver: "))
-            if buses[posicion - 1].devolucion(demanda) == True:
-                pasajero.devolverBillete(devolucion_billetes)
-                print(f"Venta correcta, hay disponibles: {buses[posicion - 1].getPlazasDisponibles()}")
+            if not pasajero.getBilletesComprados():
+                print("No ha hecho ninguna compra")
             else:
-                print(f"Venta incorrecta, no disponemos de plazas suficientes, quedan: {buses[posicion  -  1].getPlazasDisponibles()}")
+                print(pasajero.getBilletesComprados())
+                posicion = int(input("Elige bus al que quiere devolver los billetes: "))
+                if posicion <= len(buses) and posicion >0:
+                    if posicion in pasajero.getBilletesComprados():
+                        devolucion_billetes = int(input("Introduzca la cantidad de billetes a devolver: "))
+                        if buses[posicion - 1].devolucion(devolucion_billetes) == True and devolucion_billetes <= pasajero.getUnaPosicionDelDicBilletes(posicion):
+                            pasajero.restarBilletes(posicion,devolucion_billetes)
+                            print(f"Devolución correcta, en el bus hay disponibles: {buses[posicion - 1].getPlazasDisponibles()} plazas")
+                        else:
+                            print(f"Devolución incorrecta")
+                    else:
+                        print("En este bus no ha comprado ningun billete")
+                else:
+                    print("Se ha introducido un bus inexistente.")
                             
         elif opcion == 3:
-            print(f"El número de billetes comprados: {pasajero.getBilletesComprados()}")
             print(f"El nombre del pasajero es: {pasajero.getNombre()}")
             print(f"Los apellidos del pasajeron son: {pasajero.getApellido()}")
             print(f"El DNI del pasajero es: {pasajero.getDni()}")
             print(f"La direccion donde quiere ir el pasajero es: {pasajero.getDireccion()}")
-            
+            if not pasajero.getBilletesComprados():
+                print("No ha hecho ninguna compra")
+            else:
+                print(pasajero.getBilletesComprados())
+
         else:
             print("Introducir una opcion correcta")
 
@@ -103,7 +120,7 @@ def menuBus(buses):
                     print(f"El número de plazas disponibles es de: {buses[posicion  -  1].getPlazasDisponibles()}")
                     print(f"El número de plazas máximo es de: {buses[posicion  -  1].getNumeroPlazas()}")
                     print(f"El número de plazas vendidas es de:{buses[posicion  -  1].billetesVendidos()}")
-                    print(f"El número de pasajeros que han comprado billetes a su nombre es: {buses[posicion - 1].getPasajeros()}")
+                    # print(f"El número de pasajeros que han comprado billetes a su nombre es: {buses[posicion - 1].getPasajeros()}")
                 else:
                     print("Introducir una posicion correcta")
         elif opcion == 3:

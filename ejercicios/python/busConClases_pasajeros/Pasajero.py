@@ -5,7 +5,7 @@ class Pasajero():
         self.__apellido = _apellido
         self.__direccion = _direccion
         self.__dni = _dni
-        self.__billetesComprados = 0
+        self.__dic_billetesComprados = {}
 
     def getNombre(self):
         return self.__nombre
@@ -20,15 +20,22 @@ class Pasajero():
         return self.__dni
 
     def getBilletesComprados(self):
-        return self.__billetesComprados
-    
+        return self.__dic_billetesComprados
 
-    def comprarBilletes(self,_billetesComprados):
-        self.__billetesComprados = _billetesComprados
+    def getUnaPosicionDelDicBilletes(self,_posicion):
+        return self.__dic_billetesComprados[_posicion]
+
+    def sumarBilletes(self,_posicion, _billetes):
+        self.__dic_billetesComprados[_posicion] += _billetes
 
     
-    def devolverBillete(self,_billetesADevolver):
-        self.__billetesComprados -= _billetesADevolver
+    def restarBilletes(self, _posicion, _billetes):
+       self.__dic_billetesComprados[_posicion] -= _billetes
+
+    def insertarBilletes(self,_posicion,_billetes):
+        self.__dic_billetesComprados[_posicion] = _billetes
+        
+    
         
     
 

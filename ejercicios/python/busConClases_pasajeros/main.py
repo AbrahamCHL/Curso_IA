@@ -2,7 +2,6 @@ from functionsBus import *
 
 buses = []
 pasajeros = []
-dniPasajeros = []
 opcion = 0
 
 while opcion!=3:
