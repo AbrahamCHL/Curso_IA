@@ -1,11 +1,15 @@
 class Bus():
-    def __init__(self,numeroPlazas):
+    def __init__(self,numeroPlazas, nombre):
         if numeroPlazas<0:
 
             raise Exception("Ha ingresado un numero de plazas negativo, porfavor ingrese un numero positivo")
+        self.__nombreBus = nombre
         self.__numeroplazas = numeroPlazas
         self.__plazas_disponibles = numeroPlazas
         self.__lista_pasajeros = []
+
+    def getNombre(self):
+        return self.__nombreBus
 
     def getNumeroPlazas(self):
         return self.__numeroplazas

@@ -22,21 +22,21 @@ class Pasajero():
     def getBilletesComprados(self):
         return self.__dic_billetesComprados
 
-    def getUnaPosicionDelDicBilletes(self,_posicion):
-        return self.__dic_billetesComprados[_posicion]
+    def getUnaPosicionDelDicBilletes(self,clave):
+        return self.__dic_billetesComprados[clave]
 
-    def sumarBilletes(self,_posicion, _billetes):
-        self.__dic_billetesComprados[_posicion] += _billetes
+    def sumarBilletes(self,clave, _billetes):
+        self.__dic_billetesComprados[clave] += _billetes
 
     
-    def restarBilletes(self, _posicion, _billetes):
-       self.__dic_billetesComprados[_posicion] -= _billetes
+    def restarBilletes(self, clave, _billetes):
+       self.__dic_billetesComprados[clave] -= _billetes
 
-    def insertarBilletes(self,_posicion,_billetes):
-        self.__dic_billetesComprados[_posicion] = _billetes
+    def insertarBilletes(self,clave,_billetes):
+        self.__dic_billetesComprados[clave] = _billetes
 
-    def eliminarPosicionBilletes(self,_posicion):
-        self.__dic_billetesComprados.pop(_posicion)
+    def eliminarPosicionBilletes(self,clave):
+        self.__dic_billetesComprados.pop(clave)
         
     
         
