@@ -34,6 +34,9 @@ class Pasajero():
 
     def insertarBilletes(self,_posicion,_billetes):
         self.__dic_billetesComprados[_posicion] = _billetes
+
+    def eliminarPosicionBilletes(self,_posicion):
+        self.__dic_billetesComprados.pop(_posicion)
         
     
         

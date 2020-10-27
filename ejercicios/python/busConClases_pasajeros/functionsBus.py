@@ -6,7 +6,10 @@ def accionesPasajero(pasajero, buses):
     opcion = 0
     while opcion != 4:
         print("Menu\n1-Comprar billetes\n2-Devolver billetes\n3-Estado del pasajero\n4-Sortir")
-        opcion = int(input("Introduzca una opcion: "))
+        try:
+            opcion = int(input("Introducir una opción: "))
+        except ValueError:
+            print("Opción no valida")
         if opcion == 1:
             print(f"Hay {len(buses)} buses")
             posicion = int(input("Elige bus al que comprar billetes: "))                        
@@ -36,6 +39,9 @@ def accionesPasajero(pasajero, buses):
                         devolucion_billetes = int(input("Introduzca la cantidad de billetes a devolver: "))
                         if buses[posicion - 1].devolucion(devolucion_billetes) == True and devolucion_billetes <= pasajero.getUnaPosicionDelDicBilletes(posicion):
                             pasajero.restarBilletes(posicion,devolucion_billetes)
+                            if pasajero.getUnaPosicionDelDicBilletes(posicion) == 0:
+                                pasajero.eliminarPosicionBilletes(posicion)
+                                
                             print(f"Devolución correcta, en el bus hay disponibles: {buses[posicion - 1].getPlazasDisponibles()} plazas")
                         else:
                             print(f"Devolución incorrecta")
@@ -62,7 +68,10 @@ def menuPasajero(pasajeros,buses):
     opcion = 0
     while opcion!=4:
         print("Menu Pasajero\n1-Crear pasajero\n2-Ingresar como pasajero\n3-Eliminar pasajero\n4-Salir")
-        opcion = int(input("Introduzca una opcion: "))
+        try:
+            opcion = int(input("Introducir una opción: "))
+        except ValueError:
+            print("Opción no valida")
         if opcion==1:
             nombre = input("Introducir nombre: ")
             apellido = input("Introducir apellido: ")
@@ -103,13 +112,20 @@ def menuBus(buses):
     opcion = 0
     while opcion!=4:
         print("Menu Bus\n1-Crear un bus\n2-Información de un bus\n3-Eliminar un bus\n4-Salir")
-        opcion = int(input("Introducir una opción: "))
+        try:
+            opcion = int(input("Introducir una opción: "))
+        except ValueError:
+            print("Opción no valida")
         if opcion == 1:
             numero_plazas = int(input("Introducir numeros de plazas: "))
-            if numero_plazas > 0:
+            # if numero_plazas > 0:
+            try:
                 buses.append(Bus(numero_plazas))
-            else:
-                print("Introducir un numero de plazas correcto")
+            except Exception as ex:
+                print("Ha ingresado un numero de plazas negativo, porfavor ingrese un numero positivo")
+                
+            # else:
+                # print("Introducir un numero de plazas correcto")
         elif opcion == 2:
             if not buses:
                 print("No hay buses")
