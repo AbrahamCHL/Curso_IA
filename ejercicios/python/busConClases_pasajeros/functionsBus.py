@@ -14,6 +14,7 @@ def accionesPasajero(pasajero, buses, posicionPasajero):
             if not buses:
                 print("No hay buses")
             else:
+                print(f"Total de buses: {len(buses)}")
                 for x in range(len(buses)):
                     print(buses[x].getNombre())
                 
