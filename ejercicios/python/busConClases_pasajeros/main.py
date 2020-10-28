@@ -1,4 +1,5 @@
-from functionsBus import * 
+from functionsBus import *
+from functionsPasajero import * 
 
 buses = []
 pasajeros = []
@@ -13,6 +14,8 @@ while opcion!=3:
     elif opcion == 2:
         menuPasajero(pasajeros,buses)
     
+    elif opcion == 3:
+        print("Adiós")
     else:
         print("Opcion no valida, introduzca una opcion correcta")
 
