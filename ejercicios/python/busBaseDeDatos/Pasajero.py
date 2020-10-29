@@ -5,6 +5,7 @@ class Pasajero():
         self.__apellido = _apellido
         self.__direccion = _direccion
         self.__dni = _dni
+        self.__dic_billetesComprados = {}
 
     def getNombre(self):
         return self.__nombre
@@ -18,17 +19,29 @@ class Pasajero():
     def getDni(self):
         return self.__dni
 
-    def getBilletesAcomprar(self):
-        return self.__billetesAcomprar
+    def getBilletesComprados(self):
+        return self.__dic_billetesComprados
 
-    def comprarBilletes(self, _billetesAcomprar, plazasDisponibles):
-        compra = False
-        if plazasDisponibles >= _billetesAcomprar:
-            self.__billetesAcomprar = _billetesAcomprar
-            compra = True
-        else:
-            compra = False
-        
-        return compra
+    def getUnaPosicionDelDicBilletes(self,clave):
+        return self.__dic_billetesComprados[clave]
+
+    def sumarBilletes(self,clave, _billetes):
+        self.__dic_billetesComprados[clave] += _billetes
+
     
-    def devolverBilletes
+    def restarBilletes(self, clave, _billetes):
+       self.__dic_billetesComprados[clave] -= _billetes
+
+    def insertarBilletes(self,clave,_billetes):
+        self.__dic_billetesComprados[clave] = _billetes
+
+    def eliminarPosicionBilletes(self,clave):
+        self.__dic_billetesComprados.pop(clave)
+        
+    
+        
+    
+
+
+    
+    # def devolverBilletes
