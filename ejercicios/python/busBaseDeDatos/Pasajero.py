@@ -1,47 +1,53 @@
-class Pasajero():
+import psycopg2
 
-    def __init__(self,_nombre,_apellido,_direccion, _dni):
-        self.__nombre = _nombre
-        self.__apellido = _apellido
-        self.__direccion = _direccion
-        self.__dni = _dni
-        self.__dic_billetesComprados = {}
+class Pasajero:
 
-    def getNombre(self):
-        return self.__nombre
+    def __init__(self):
+        pass
+
+    def insertPasajero(self, cursor,dni,nombre,apellido,direccion):
+        rows_count = 0
+        sql = """INSERT INTO public.pasajero(
+            dni, apellido, nombre, direccion)
+            VALUES (%s, %s, %s, %s);"""
+        try:
+            cursor.execute(sql, (dni,apellido, nombre, direccion))
+            rows_count = cursor.rowcount
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+
+        return rows_count
     
-    def getApellido(self):
-        return self.__apellido
-    
-    def getDireccion(self):
-        return self.__direccion
-    
-    def getDni(self):
-        return self.__dni
 
-    def getBilletesComprados(self):
-        return self.__dic_billetesComprados
-
-    def getUnaPosicionDelDicBilletes(self,clave):
-        return self.__dic_billetesComprados[clave]
-
-    def sumarBilletes(self,clave, _billetes):
-        self.__dic_billetesComprados[clave] += _billetes
-
-    
-    def restarBilletes(self, clave, _billetes):
-       self.__dic_billetesComprados[clave] -= _billetes
-
-    def insertarBilletes(self,clave,_billetes):
-        self.__dic_billetesComprados[clave] = _billetes
-
-    def eliminarPosicionBilletes(self,clave):
-        self.__dic_billetesComprados.pop(clave)
+    def showPasajero(self,cursor,dni):
+        sql = "select * from pasajero where dni = %s"
+        try:
+            cursor.execute(sql, (dni,))
+            pasajero = cursor.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
         
-    
+        return pasajero
+
+
+    def showPasajeros(self,cursor):
+        sql = "SELECT * FROM pasajero"
+        try:
+            cursor.execute(sql)
+            pasajeros = cursor.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
         
-    
+        return pasajeros
 
-
+    def deletePasajero(self,cursor, dni):
+        sql = "DELETE FROM pasajero WHERE dni = %s"
+        try:
+            cursor.execute(sql, (dni,))
+            rows_deleted = cursor.rowcount
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        
+        return rows_deleted
     
-    # def devolverBilletes
+    

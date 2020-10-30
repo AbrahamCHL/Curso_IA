@@ -1,6 +1,5 @@
 import psycopg2
 
-
 class Bus:
     def __init__(self):
         pass
@@ -40,46 +39,13 @@ class Bus:
         return rows_deleted
 
     
-    # def getNombre(self):
-    #     return self.__nombreBus
-
-    # def getNumeroPlazas(self):
-    #     return self.__numeroplazas
-
-    # def getPlazasDisponibles(self):
-    #     return self.__plazas_disponibles
-    
-    # def ventaDeBilletes(self,billetesAcomprar):
-    #     ventacorrecta = False
-    #     if billetesAcomprar > self.getPlazasDisponibles():
-    #         #ventacorrecta = False
-    #         pass
+    def showBuses(self,conexion):
+        sql = "SELECT * FROM bus"
+        try:
+            conexion.execute(sql)
+            buses = conexion.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
         
-    #     else:
-    #         self.__plazas_disponibles -= billetesAcomprar
-    #         ventacorrecta = True
-
-    #     return ventacorrecta
-
-    # def insertPasajero(self,_pasajero):
-    #     self.__lista_pasajeros.append(_pasajero)
-
-    # def eliminarPasajero(self,_posicion):
-    #     self.__lista_pasajeros.pop(_posicion)
-
-    # def devolucion(self,BilletesADevolver):
-    #     devolucioncorrecta = False
-    #     if self.getNumeroPlazas() < (BilletesADevolver + self.getPlazasDisponibles()):
-    #         #devolucioncorrecta = False
-    #         pass
-        
-    #     else:
-    #         self.__plazas_disponibles += BilletesADevolver
-    #         devolucioncorrecta = True
-    #     return devolucioncorrecta
+        return buses
     
-    # def billetesVendidos(self):
-    #     return self.getNumeroPlazas() - self.getPlazasDisponibles()
-
-    # def getPasajeros(self):
-    #     return self.__lista_pasajeros

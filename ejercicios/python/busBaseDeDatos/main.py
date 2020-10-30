@@ -1,50 +1,42 @@
 from funcionesBus import *
+from funcionesPasajero import *
 from Conexion import Conexion
 
 conexion = Conexion()
 
+if conexion.comprobacionConexion() == True:
+    conexion.createTableBus()
+    conexion.createTablePasajero()
+    conexion.commit()
+    opcion = 0
+    while opcion!=3:
+        print("Menu\n1-Menu Bus\n2-Menu Pasajero\n3-Salir")
+        while True:
+            try:
+                opcion = int(input("Introducir una opción: "))
+                break
+            except ValueError:
+                print("La opción debe de ser un digito")
+        if opcion == 1:
+        
+            menuBus(conexion)
 
-opcion = 0
-while opcion!=3:
-    print("Menu\n1-Menu Bus\n2-Menu Pasajero\n3-Salir")
-    while True:
-        try:
-            opcion = int(input("Introducir una opción: "))
-            break
-        except ValueError:
-            print("La opción debe de ser un digito")
-    if opcion == 1:
-        conexion.createTableBus()
-        conexion.commit()
-        menuBus(conexion)
+        elif opcion == 2:
+            menuPasajero(conexion)
+        
+        elif opcion == 3:
+            print("Adiós")
+        else:
+            print("Opcion no valida, introduzca una opcion correcta")
+        
+    conexion.closeConection()
 
-    elif opcion == 2:
-        # menuPasajero(pasajeros,buses)
-        pass
-    
-    elif opcion == 3:
-        print("Adiós")
-    else:
-        print("Opcion no valida, introduzca una opcion correcta")
-    
-    
-
-conexion.closeConection()
+else:
+    print("No se ha podido conectar a la base de datos")
 
 
 
-# sql ="""CREATE TABLE IF NOT EXISTS pasajero(
-#    dni VARCHAR(9),
-#    id_bus INT,
-#    apellido VARCHAR(50) NOT NULL,
-#    nombre VARCHAR(50) NOT NULL,
-#    direccion VARCHAR(100),
-#    billetes INT,
-#    PRIMARY KEY(dni),
-#    CONSTRAINT fk_bus
-#       FOREIGN KEY(id_bus) 
-# 	    REFERENCES bus(id_bus)
-# )"""
+
 
 
 
