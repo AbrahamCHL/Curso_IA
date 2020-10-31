@@ -40,13 +40,17 @@ def crearBus(cur,bus):
         except ValueError:
             print("El numero de plazas debe de ser un digito")
     
-    if bus.insertBus(cur,nombre,numero_plazas) > 0:
-        print("Bus creado correctamente")
-       
-    else:
-        print("Error, el bus no se ha creado correctamente")
+    
+    try:
+        if bus.insertBus(cur,nombre,numero_plazas) > 0:
+            print("Bus creado correctamente")
         
+        else:
+            print("Error, el bus no se ha creado correctamente")
+    except Exception as ex:
+        print(ex)
 
+    
 def estadoBus(cur,bus): 
     buses = bus.showBuses(cur)
     if len(buses)>0:
@@ -75,8 +79,10 @@ def estadoBus(cur,bus):
 def eliminarBus(cur,bus):
     buses = bus.showBuses(cur)
     if len(buses)>0:
+        cont = 0
         for row in buses:
-            print(f"Bus: {row[1]}")
+            cont += 1
+            print(f"{cont}.- Bus: {row[1]}")
         nombreBus = input("Introducir nombre del bus que quiere eliminar: ")
         if bus.deleteBus(cur,nombreBus) > 0:
             print("Bus eliminado correctamente")

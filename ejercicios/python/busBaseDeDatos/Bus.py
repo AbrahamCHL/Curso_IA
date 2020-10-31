@@ -6,6 +6,9 @@ class Bus:
         
 
     def insertBus(self,conexion,nombre,numero_plazas ):
+        if numero_plazas <0:
+            raise Exception("Ha ingresado un numero de plazas negativo, porfavor ingrese un numero positivo")
+        
         rows_count = 0
         sql = """INSERT INTO public.bus(
             nombre_bus, numero_plazas, plazas_disponibles, plazas_vendidas)
