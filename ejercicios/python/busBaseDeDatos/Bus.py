@@ -51,4 +51,27 @@ class Bus:
             print(error)
         
         return buses
+
+
+
+    def updatePlazasDisponibles(self,conexion,plazasDisponibles,nombre):
+        sql = """UPDATE bus SET plazas_disponibles = (%s) WHERE nombre_bus = (%s)""" 
+        try:
+            conexion.execute(sql,(plazasDisponibles, nombre))
+            rows_set = conexion.rowcount
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        
+        return rows_set
+
+
+    def updatePlazasVendidas(self,conexion,plazasVendidas,nombre):
+        sql = """UPDATE bus SET plazas_vendidas = (%s) WHERE nombre_bus = (%s)""" 
+        try:
+            conexion.execute(sql,(plazasVendidas, nombre))
+            rows_set = conexion.rowcount
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        
+        return rows_set
     

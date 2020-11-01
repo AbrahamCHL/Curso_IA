@@ -41,12 +41,13 @@ class Conexion:
     def createTableTransaccion(self):
         sql ="""CREATE TABLE IF NOT EXISTS transaccion(
             id_transaccion SERIAL,
-            id_bus INT NOT NULL,
+            nombre_bus VARCHAR(50) NOT NULL,
             dni_pasajero VARCHAR(9) NOT NULL,
+            cantidad_billetes INT NOT NULL,
             PRIMARY KEY(id_transaccion),
             CONSTRAINT fk_bus
-                FOREIGN KEY(id_bus) 
-                    REFERENCES bus(id_bus)
+                FOREIGN KEY(nombre_bus) 
+                    REFERENCES bus(nombre_bus)
             ,CONSTRAINT fk_pasajero
                 FOREIGN KEY(dni_pasajero) 
                     REFERENCES pasajero(dni))

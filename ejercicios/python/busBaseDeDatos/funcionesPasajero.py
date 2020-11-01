@@ -18,7 +18,7 @@ def menuPasajero(conexion):
             crearPasajero(cur,pasajero)
             
         elif opcion==2:
-            ingresarComoPasajero(cur,pasajero)
+            ingresarComoPasajero(conexion,cur,pasajero)
                     
         elif opcion==3:
             eliminarPasajero(cur,pasajero)
@@ -43,7 +43,7 @@ def crearPasajero(cur,pasajero):
 
 
 
-def ingresarComoPasajero(cur,pasajero):
+def ingresarComoPasajero(conexion,cur,pasajero):
     pasajeros = pasajero.showPasajeros(cur)
     if len(pasajeros)>0:
         cont =0
@@ -53,7 +53,7 @@ def ingresarComoPasajero(cur,pasajero):
         dniAbuscar = input("Introducir dni del pasajero: ")
         pasajeroAmostrar = pasajero.showPasajero(cur,dniAbuscar)
         if len(pasajeroAmostrar)>0:
-            accionesPasajero(cur,dniAbuscar,pasajeroAmostrar)
+            accionesPasajero(conexion,cur,dniAbuscar,pasajeroAmostrar)
         else:
             print("El pasajero que ha introducido no existe")
     else:
