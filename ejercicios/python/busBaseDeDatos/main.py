@@ -7,6 +7,7 @@ conexion = Conexion()
 if conexion.comprobacionConexion() == True:
     conexion.createTableBus()
     conexion.createTablePasajero()
+    conexion.createTableTransaccion()
     conexion.commit()
     opcion = 0
     while opcion!=3:

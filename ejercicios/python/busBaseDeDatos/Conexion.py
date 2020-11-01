@@ -1,18 +1,5 @@
 import psycopg2
 
-
-# sql ="""CREATE TABLE IF NOT EXISTS pasajero(
-#             dni VARCHAR(9) UNIQUE,
-#             id_bus INT,
-#             apellido VARCHAR(50) NOT NULL,
-#             nombre VARCHAR(50) NOT NULL,
-#             direccion VARCHAR(100),
-#             PRIMARY KEY(dni),
-#             CONSTRAINT fk_bus
-#                 FOREIGN KEY(id_bus) 
-#                     REFERENCES bus(id_bus)
-#             )"""
-
 class Conexion:
     def __init__(self):
         self.__cur = 0
@@ -50,6 +37,24 @@ class Conexion:
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
+
+    def createTableTransaccion(self):
+        sql ="""CREATE TABLE IF NOT EXISTS transaccion(
+            id_transaccion SERIAL,
+            id_bus INT NOT NULL,
+            dni_pasajero VARCHAR(9) NOT NULL,
+            PRIMARY KEY(id_transaccion),
+            CONSTRAINT fk_bus
+                FOREIGN KEY(id_bus) 
+                    REFERENCES bus(id_bus)
+            ,CONSTRAINT fk_pasajero
+                FOREIGN KEY(dni_pasajero) 
+                    REFERENCES pasajero(dni))
+            """
+        try:
+            self.__cur.execute(sql)
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
 
     def getConexion(self):
         return self.__cur
