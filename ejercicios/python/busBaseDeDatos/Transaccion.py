@@ -67,6 +67,16 @@ class Transaccion:
             print(error)
         
         return transaccion
+    
+    def buscarPasajeros(self,nombre_bus):
+        sql = "select dni_pasajero from transaccion where nombre_bus = %s"
+        try:
+            cur.execute(sql, (nombre_bus,))
+            dni_pasajeros = cur.fetchall()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        
+        return dni_pasajeros
 
     def comprobarBusDelPasajero(self,nombre_bus,dni_pasajero):
         sql = "select * from transaccion where dni_pasajero = %s and nombre_bus = %s"

@@ -1,6 +1,7 @@
 import psycopg2
 from Conexion import cur
 
+
 class Bus:
     def __init__(self):
         pass

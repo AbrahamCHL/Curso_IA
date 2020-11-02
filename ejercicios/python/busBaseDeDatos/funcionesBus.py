@@ -1,5 +1,10 @@
 from Bus import Bus
 from Conexion import conexion
+from Transaccion import Transaccion
+from Pasajero import Pasajero
+
+transaccion = Transaccion()
+pasajero = Pasajero()
 bus = Bus()
 
 def menuBus():
@@ -61,12 +66,17 @@ def estadoBus():
         nombreBus = input("Introducir nombre del bus que quiere ver: ")
         busAmostrar = bus.showBus(nombreBus)
         if len(busAmostrar)>0:
+            print("-------------BUS-------------")
             for row in busAmostrar:
                 print(f"Id: {row[0]}")
                 print(f"Nombre Bus: {row[1]}")
                 print(f"Numero plazas: {row[2]}")
                 print(f"Plazas disponibles: {row[3]}")
-                print(f"Plazas vendidas: {row[4]}") 
+                print(f"Plazas vendidas: {row[4]}")
+            
+            print("-------------PASAJEROS-------------")
+            buscarPasajeros(nombreBus)
+
         else:
             print("El bus que ha introducido no existe")
 
@@ -93,8 +103,25 @@ def eliminarBus():
 
     
 
-
-
-
+def buscarPasajeros(nombre_bus):
+    dni_pasajeros = transaccion.buscarPasajeros(nombre_bus)
+    if len(dni_pasajeros):
+        cont = 0
+        dnis = []
+        for row in dni_pasajeros:
+            cont += 1
+            dnis.append(row[0])
+        for x in dnis:
+            mostrarPasajero = pasajero.showPasajero(x)
+            if len(mostrarPasajero) > 0:
+                for row in mostrarPasajero:
+                    print(f"DNI: {row[0]}")
+                    print(f"Apellido: {row[1]}")
+                    print(f"Nombre: {row[2]}")
+                    print(f"Direccion: {row[3]}")
+                    print("")
+    else:
+        print("No tiene pasajeros")
+                
 
 
