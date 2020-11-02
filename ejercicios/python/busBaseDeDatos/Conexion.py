@@ -74,3 +74,7 @@ class Conexion:
     
     def commit(self):
         self.__conn.commit()
+
+
+conexion = Conexion()
+cur = conexion.getConexion()

@@ -1,13 +1,13 @@
 from Transaccion import Transaccion
 from Bus import Bus
 from Pasajero import Pasajero
-
+from Conexion import conexion
 
 pasajero = Pasajero()
 transaccion = Transaccion()
 bus = Bus()
 
-def accionesPasajero(conexion,cur,dni,pasajeroAmostrar):
+def accionesPasajero(dni,pasajeroAmostrar):
     
     opcion = 0
     while opcion != 4:
@@ -20,14 +20,14 @@ def accionesPasajero(conexion,cur,dni,pasajeroAmostrar):
                 print("Opción debe de ser un digito")
 
         if opcion == 1:
-            compraBilletes(cur,dni)
+            compraBilletes(dni)
 
         elif opcion == 2:
             
-            devolverBilletes(cur,dni)
+            devolverBilletes(dni)
                   
         elif opcion == 3:
-            estadoPasajero(cur,pasajeroAmostrar,dni)
+            estadoPasajero(pasajeroAmostrar,dni)
 
         elif opcion == 4:
             print(f"Adiós")
@@ -37,8 +37,8 @@ def accionesPasajero(conexion,cur,dni,pasajeroAmostrar):
         conexion.commit()
 
 
-def compraBilletes(cur,dni):
-    buses = bus.showBuses(cur)
+def compraBilletes(dni):
+    buses = bus.showBuses()
     if len(buses)>0:
         cont = 0
         for row in buses:
@@ -46,7 +46,7 @@ def compraBilletes(cur,dni):
             print(f"{cont}.- Bus: {row[1]} Plazas disponibles: {row[3]}")
 
         nombreBus = input("Introducir nombre del bus donde quiere comprar los billetes: ")
-        busAmostrar = bus.showBus(cur,nombreBus)
+        busAmostrar = bus.showBus(nombreBus)
         if len(busAmostrar)>0:
             while True:
                 try:
@@ -61,13 +61,13 @@ def compraBilletes(cur,dni):
                     plazasDisponibles -= cantidad_billetes
                     plazasVendidas+= cantidad_billetes
                     nombre_bus = busAmostrar[0][1]
-                    if len(transaccion.comprobarTransaccion(cur,nombre_bus, dni)) > 0:
-                        if bus.updatePlazasDisponibles(cur,plazasDisponibles,nombreBus) > 0 and bus.updatePlazasVendidas(cur,plazasVendidas,nombreBus) > 0 and transaccion.updateTransaccion(cur,dni,nombre_bus,cantidad_billetes) > 0:
+                    if len(transaccion.comprobarTransaccion(nombre_bus, dni)) > 0:
+                        if bus.updatePlazasDisponibles(plazasDisponibles,nombreBus) > 0 and bus.updatePlazasVendidas(plazasVendidas,nombreBus) > 0 and transaccion.updateTransaccion(dni,nombre_bus,cantidad_billetes) > 0:
                             print("actulizado")
                         else:
                             print("No se ha podido actualizar las plazas")
                     else:
-                        if bus.updatePlazasDisponibles(cur,plazasDisponibles,nombreBus) > 0 and bus.updatePlazasVendidas(cur,plazasVendidas,nombreBus) > 0 and transaccion.comprarBilletes(cur,dni,nombre_bus,cantidad_billetes) > 0:
+                        if bus.updatePlazasDisponibles(plazasDisponibles,nombreBus) > 0 and bus.updatePlazasVendidas(plazasVendidas,nombreBus) > 0 and transaccion.comprarBilletes(dni,nombre_bus,cantidad_billetes) > 0:
                             print("ingresado")
                         else:
                             print("No se ha podido ingresar")
@@ -83,8 +83,8 @@ def compraBilletes(cur,dni):
         print("No hay buses")
 
 
-def devolverBilletes(cur,dni):
-    listaTransacciones = transaccion.showTransaccion(cur,dni)
+def devolverBilletes(dni):
+    listaTransacciones = transaccion.showTransaccion(dni)
     if len(listaTransacciones) > 0:
         print("-------------TRANSACCIONES-------------")
         for row in listaTransacciones:
@@ -93,8 +93,8 @@ def devolverBilletes(cur,dni):
             print(f"cantidad de tickets: {row[3]}")
             print("")
         nombreBus = input("Introducir nombre del bus al que quiere devolver los billetes: ")
-        busAmostrar = bus.showBus(cur,nombreBus)
-        comprobarBus = transaccion.comprobarBusDelPasajero(cur,nombreBus,dni)
+        busAmostrar = bus.showBus(nombreBus)
+        comprobarBus = transaccion.comprobarBusDelPasajero(nombreBus,dni)
         if len(busAmostrar)>0 and len(comprobarBus) >0:
             while True:
                 try:
@@ -109,7 +109,7 @@ def devolverBilletes(cur,dni):
                 if cantidad_billetes <= plazasCompradas:
                     plazasDisponibles += cantidad_billetes
                     plazasVendidas -= cantidad_billetes
-                    if bus.updatePlazasDisponibles(cur,plazasDisponibles,nombreBus) > 0 and bus.updatePlazasVendidas(cur,plazasVendidas,nombreBus) > 0 and transaccion.devolverBilletes(cur,dni,nombreBus,cantidad_billetes) > 0:
+                    if bus.updatePlazasDisponibles(plazasDisponibles,nombreBus) > 0 and bus.updatePlazasVendidas(plazasVendidas,nombreBus) > 0 and transaccion.devolverBilletes(dni,nombreBus,cantidad_billetes) > 0:
                         print("actulizado")
                     else:
                         print("No se ha podido actualizar las plazas")
@@ -117,7 +117,6 @@ def devolverBilletes(cur,dni):
                     print("La cantidad de billetes que quiere devolver es mayor a sus tickets comprados")
             else:
                 print("Introduzca una cantidad de billetes valida")
-                
 
         else:
             print("Error, no ha hecho ninguna transaccion con el bus que ha introducido")
@@ -127,7 +126,7 @@ def devolverBilletes(cur,dni):
 
 
 
-def estadoPasajero(cur,pasajeroAmostrar,dni):
+def estadoPasajero(pasajeroAmostrar,dni):
     print("-------------DATOS PASAJERO-------------")
     for row in pasajeroAmostrar:
         print(f"DNI: {row[0]}")
@@ -135,7 +134,7 @@ def estadoPasajero(cur,pasajeroAmostrar,dni):
         print(f"Nombre: {row[2]}")
         print(f"Direccion: {row[3]}")
     
-    listaTransacciones = transaccion.showTransaccion(cur,dni)
+    listaTransacciones = transaccion.showTransaccion(dni)
     if len(listaTransacciones) > 0:
         print("-------------TRANSACCIONES-------------")
         for row in listaTransacciones:

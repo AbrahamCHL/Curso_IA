@@ -1,8 +1,7 @@
 from funcionesBus import *
 from funcionesPasajero import *
-from Conexion import Conexion
+from Conexion import conexion
 
-conexion = Conexion()
 
 if conexion.comprobacionConexion() == True:
     conexion.createTableBus()
@@ -20,10 +19,10 @@ if conexion.comprobacionConexion() == True:
                 print("La opción debe de ser un digito")
         if opcion == 1:
         
-            menuBus(conexion)
+            menuBus()
 
         elif opcion == 2:
-            menuPasajero(conexion)
+            menuPasajero()
         
         elif opcion == 3:
             print("Adiós")

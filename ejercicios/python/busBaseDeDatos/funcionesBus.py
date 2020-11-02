@@ -1,8 +1,9 @@
 from Bus import Bus
+from Conexion import conexion
+bus = Bus()
 
-def menuBus(conexion):
-    cur = conexion.getConexion()
-    bus = Bus()
+def menuBus():
+    
     opcion = 0
     while opcion!=4:
         print("Menu Bus\n1-Crear un bus\n2-Mostrar estado de un bus\n3-Eliminar un bus\n4-Salir")
@@ -15,13 +16,13 @@ def menuBus(conexion):
                 print("La opcion debe de ser un digito")
         
         if opcion == 1:
-            crearBus(cur,bus)
+            crearBus()
 
         elif opcion == 2:
-            estadoBus(cur,bus)
+            estadoBus()
                 
         elif opcion == 3:
-            eliminarBus(cur,bus)
+            eliminarBus()
         elif opcion == 4:
             print("Ha salido del menu bus")
         else:
@@ -29,8 +30,7 @@ def menuBus(conexion):
         conexion.commit()
 
 
-
-def crearBus(cur,bus):
+def crearBus():
     nombre_existe = False
     nombre = input("Introducir nombre del bus: ")
     while True:
@@ -42,7 +42,7 @@ def crearBus(cur,bus):
     
     
     try:
-        if bus.insertBus(cur,nombre,numero_plazas) > 0:
+        if bus.insertBus(nombre,numero_plazas) > 0:
             print("Bus creado correctamente")
         
         else:
@@ -51,15 +51,15 @@ def crearBus(cur,bus):
         print(ex)
 
     
-def estadoBus(cur,bus): 
-    buses = bus.showBuses(cur)
+def estadoBus(): 
+    buses = bus.showBuses()
     if len(buses)>0:
         cont = 0
         for row in buses:
             cont += 1
             print(f"{cont}.- Bus: {row[1]}")
         nombreBus = input("Introducir nombre del bus que quiere ver: ")
-        busAmostrar = bus.showBus(cur,nombreBus)
+        busAmostrar = bus.showBus(nombreBus)
         if len(busAmostrar)>0:
             for row in busAmostrar:
                 print(f"Id: {row[0]}")
@@ -75,16 +75,15 @@ def estadoBus(cur,bus):
 
     
     
-
-def eliminarBus(cur,bus):
-    buses = bus.showBuses(cur)
+def eliminarBus():
+    buses = bus.showBuses()
     if len(buses)>0:
         cont = 0
         for row in buses:
             cont += 1
             print(f"{cont}.- Bus: {row[1]}")
         nombreBus = input("Introducir nombre del bus que quiere eliminar: ")
-        if bus.deleteBus(cur,nombreBus) > 0:
+        if bus.deleteBus(nombreBus) > 0:
             print("Bus eliminado correctamente")
         else:
             print("El bus que ha introducido no existe")
