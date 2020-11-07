@@ -1,0 +1,58 @@
+1
+
+SELECT nombre as disco 
+FROM cds 
+WHERE año_compra = '2010'
+
+2
+
+SELECT c.nombre as DISCO, p.nombre as FAMILIAR
+FROM cds AS c
+JOIN persona as p ON c.id_persona=p.id
+
+3
+
+SELECT c.nombre as Album, a.nombre as Autor
+FROM cds as c
+JOIN tiene_autor as ta ON c.id=ta.id_cd
+JOIN autores as a ON ta.id_autor=a.id
+WHERE a.nombre LIKE "Andrea Bocelli"
+
+4
+
+SELECT c.nombre, GROUP_CONCAT(g.nombre) as ListaGeneros
+FROM cds as c 
+JOIN tiene_generos as tg ON c.id= tg.id_cd
+JOIN generos as g ON tg.id_genero=g.id
+GROUP BY c.nombre
+HAVING ListaGeneros = ("rock,pop")
+
+5
+
+SELECT c.nombre
+FROM cds as c
+INNER JOIN idiomas as i ON i.id=c.id_idioma
+WHERE i.lengua LIKE "ingles"
+
+6
+
+SELECT c.nombre , GROUP_CONCAT(a.nombre) as autoresnombres
+FROM cds as c 
+JOIN tiene_autor as ta ON c.id=ta.id_cd
+JOIN autores as a ON a.id=ta.id_autor
+GROUP BY c.nombre
+HAVING autoresnombres = ("David Guetta,Kid Cudi")
+
+7
+
+SELECT a.nombre
+FROM autores as a 
+INNER JOIN nacionalidades as n ON a.id_nacionalidad=n.id
+WHERE n.nacionalidad LIKE "italiano"
+
+8
+
+SELECT a.nombre, d.nombre
+FROM autores as a 
+INNER JOIN discografica as d ON a.id_discografica=d.id
+WHERE d.nombre LIKE "sony music" or d.nombre LIKE "warner music"
