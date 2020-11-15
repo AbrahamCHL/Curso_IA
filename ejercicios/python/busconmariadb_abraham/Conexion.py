@@ -1,73 +1,66 @@
-import psycopg2
+import mysql.connector
 
 class Conexion:
     def __init__(self):
-        self.__cur = 0
         try:
-            self.__conn = psycopg2.connect(host="localhost", port = 5432, database="postgres", user="admin", password="admin")
+            self.__conn = mysql.connector.connect(host="localhost", port = 3306, database="proyectobus", user="root", password="password")
             self.__cur = self.__conn.cursor()
-            print("Conexion a la base de datos correcta")
-        except (Exception, psycopg2.DatabaseError) as error:
+        except mysql.connector.Error as error:
+            self.__cur = 0
             print(error)
+    
+    def getConexion(self):
+        return self.__cur
+    
     
     def createTableBus(self):
         sql ="""CREATE TABLE IF NOT EXISTS bus
             (
-                id_bus SERIAL,
-                nombre_bus VARCHAR(50) UNIQUE,
+                nombre VARCHAR(50) ,
                 numero_plazas INT NOT NULL,
-                plazas_disponibles INT,
-                plazas_vendidas INT,
-                PRIMARY KEY(id_bus)
+                plazas_disponibles INT NOT NULL,
+                plazas_vendidas INT NOT NULL,
+                PRIMARY KEY(nombre)
             )"""
         try:
             self.__cur.execute(sql)
-        except (Exception, psycopg2.DatabaseError) as error:
+        except mysql.connector.Error as error:
             print(error)
     
     def createTablePasajero(self):
         sql ="""CREATE TABLE IF NOT EXISTS pasajero(
-            dni VARCHAR(9) UNIQUE,
+            dni VARCHAR(9),
             apellido VARCHAR(50) NOT NULL,
             nombre VARCHAR(50) NOT NULL,
             direccion VARCHAR(100),
             PRIMARY KEY(dni))"""
         try:
             self.__cur.execute(sql)
-        except (Exception, psycopg2.DatabaseError) as error:
+        except mysql.connector.Error as error:
             print(error)
 
 
     def createTableTransaccion(self):
         sql ="""CREATE TABLE IF NOT EXISTS transaccion(
-            id_transaccion SERIAL,
-            nombre_bus VARCHAR(50) NOT NULL,
-            dni_pasajero VARCHAR(9) NOT NULL,
+            nombre_bus VARCHAR(50),
+            dni_pasajero VARCHAR(9),
             cantidad_billetes INT NOT NULL,
-            PRIMARY KEY(id_transaccion),
+            fecha_compra TIMESTAMP NOT NULL,
+            CONSTRAINT transaccion_pkey PRIMARY KEY (nombre_bus, dni_pasajero),
             CONSTRAINT fk_bus
                 FOREIGN KEY(nombre_bus) 
-                    REFERENCES bus(nombre_bus)
+                    REFERENCES bus(nombre)
             ,CONSTRAINT fk_pasajero
                 FOREIGN KEY(dni_pasajero) 
                     REFERENCES pasajero(dni))
             """
         try:
             self.__cur.execute(sql)
-        except (Exception, psycopg2.DatabaseError) as error:
+        except mysql.connector.Error as error:
             print(error)
 
-    def getConexion(self):
-        return self.__cur
-
-    def comprobacionConexion(self):
-        if self.__cur != 0:
-            conexion = True
-        else:
-            conexion = False
-        
-        return conexion
-        
+    
+    
     def closeConection(self):
         self.__cur.close()
         self.__conn.close()

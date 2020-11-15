@@ -1,9 +1,9 @@
-from funcionesBus import *
-from funcionesPasajero import *
+from funcionesBus import menuBus
+from funcionesPasajero import menuPasajero
 from Conexion import conexion
 
-
-if conexion.comprobacionConexion() == True:
+if conexion.getConexion()!=0:
+    print("Conexion a la base de datos correcta")
     conexion.createTableBus()
     conexion.createTablePasajero()
     conexion.createTableTransaccion()

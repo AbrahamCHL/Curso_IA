@@ -1,8 +1,11 @@
 from Pasajero import Pasajero
-from accionesPasajero import *
+from accionesPasajero import accionesPasajero
 from Conexion import conexion
+from AdminPasajero import AdminPasajero
+from AdminBus import AdminBus
 
-pasajero = Pasajero()
+adminbus = AdminBus()
+adminpasajero = AdminPasajero()
 
 def menuPasajero():
     opcion = 0
@@ -20,6 +23,7 @@ def menuPasajero():
             
         elif opcion==2:
             ingresarComoPasajero()
+            pass
                     
         elif opcion==3:
             eliminarPasajero()
@@ -36,8 +40,10 @@ def crearPasajero():
     nombre = input("Introducir nombre: ")
     apellido = input("Introducir apellido: ")
     direccion = input("Introducir la direccion: ")
+
+    pasajero = Pasajero(dni,nombre,apellido,direccion)
     
-    if pasajero.insertPasajero(dni,nombre,apellido,direccion) > 0:
+    if adminpasajero.insertPasajero(pasajero) > 0:
         print("Pasajero creado correctamente")
     else:
         print("Error, el pasajero no se ha creado")
@@ -45,14 +51,14 @@ def crearPasajero():
 
 
 def ingresarComoPasajero():
-    pasajeros = pasajero.showPasajeros()
+    pasajeros = adminpasajero.showPasajeros()
     if len(pasajeros)>0:
         cont =0
         for row in pasajeros:
             cont += 1
             print(f"{cont}.- DNI: {row[0]} Apellido: {row[1]} Nombre: {row[2]}")
         dniAbuscar = input("Introducir dni del pasajero: ")
-        pasajeroAmostrar = pasajero.showPasajero(dniAbuscar)
+        pasajeroAmostrar = adminpasajero.showPasajero(dniAbuscar)
         if len(pasajeroAmostrar)>0:
             accionesPasajero(dniAbuscar,pasajeroAmostrar)
         else:
@@ -62,7 +68,7 @@ def ingresarComoPasajero():
 
 
 def eliminarPasajero():
-    pasajeros = pasajero.showPasajeros()
+    pasajeros = adminpasajero.showPasajeros()
     if len(pasajeros)>0:
         cont =0
         for row in pasajeros:
@@ -70,10 +76,29 @@ def eliminarPasajero():
             print(f"{cont}.- DNI: {row[0]} Apellido: {row[1]} Nombre: {row[2]}")
             
         dniAborrar = input("Introducir dni del pasajero a borrar: ")
-        if pasajero.deletePasajero(dniAborrar) > 0:
-            print("Pasajero eliminado correctamente")
+        
+        transaccionPasajero = adminpasajero.comprobarTransaccionPasajero(dniAborrar)
+        if len(transaccionPasajero):
+            for row in transaccionPasajero:
+                busAmostrar = adminbus.showBus(row[0])
+                plazasCompradas = row[2]
+                plazasDisponibles = busAmostrar[0][2]
+                plazasVendidas = busAmostrar[0][3]
+                plazasDisponibles += plazasCompradas
+                plazasVendidas -= plazasCompradas
+                if adminbus.updatePlazasDisponibles(plazasDisponibles,row[0]) > 0 and adminbus.updatePlazasVendidas(plazasVendidas,row[0]) > 0:
+                    print("actulizado")
+                else:
+                    print("No se ha podido actualizar las plazas")
+            if adminpasajero.deleteTransaccionPasajero(dniAborrar) > 0 and adminpasajero.deletePasajero(dniAborrar) > 0:
+                print("Pasajero eliminado correctamente")
+            else:
+                print("El pasajero que ha introducido no existe")
         else:
-            print("El pasajero que ha introducido no existe")
+            if adminpasajero.deletePasajero(dniAborrar) > 0:
+                print("Pasajero eliminado correctamente")
+            else:
+                print("El pasajero que ha introducido no existe")                 
     else:
         print("No hay pasajeros")
 
