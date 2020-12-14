@@ -1,12 +1,15 @@
 from flask import Flask, jsonify, request as req
-import sqlalchemy 
+#import sqlalchemy 
 import pandas as pd
 from flask_mysqldb import MySQL
-from sqlalchemy import create_engine, select, MetaData, Table
+from sqlalchemy import *
 
 #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost/anime'
 
-engine = sqlalchemy.create_engine('mysql+pymysql://root:password@localhost/anime', echo=False)
+engine = create_engine('mysql+pymysql://root:password@localhost/anime', echo=False)
+with engine.begin() as conn:     
+      conn.execute("ALTER TABLE anime ENGINE = MYISAM")
+
 metadata = MetaData(bind=None)
 app = Flask(__name__)
 
@@ -24,7 +27,9 @@ def create_table():
     animes = animes[['anime_id','name']]
 
     # Cortando la dataframe de ratings a 1167(cantidad de columnas sql)
-    ratings = ratings.head(1167)
+    #ratings = ratings.head(1167)
+    ratings = ratings.head(15000)
+
     data = pd.merge(animes,ratings)
 
     # Agregramos el anime_id por que name a la hora de crear la tabla da problemas de duplicidad (64 caracteres sql)
