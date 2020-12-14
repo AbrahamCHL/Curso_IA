@@ -1,21 +1,11 @@
 from flask import Flask, jsonify, request as req
-#import sqlalchemy 
 import pandas as pd
-from flask_mysqldb import MySQL
 from sqlalchemy import *
 
-#SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost/anime'
-
 engine = create_engine('mysql+pymysql://root:password@localhost/anime', echo=False)
-with engine.begin() as conn:     
-      conn.execute("ALTER TABLE anime ENGINE = MYISAM")
 
 metadata = MetaData(bind=None)
 app = Flask(__name__)
-
-
-mysql = MySQL(app)
-
 
 @app.route('/entrenamiento/', methods = ['GET'])
 def create_table():
@@ -25,45 +15,67 @@ def create_table():
     ratings = ratings[['user_id','anime_id','rating']]
     animes = pd.read_csv('/home/supay/datos/anime.csv')
     animes = animes[['anime_id','name']]
+    #print(animes)
+    animes = animes.head(700)
+    # remplazo caracteres
+    animes['name'] = animes['name'].str.replace(r'[./;&°#!:-]', '',regex=True)
+    # corto las string
+    animes['name'] = animes['name'].str.slice(0,64)
+    # borro espacios finales
+    animes.name = animes.name.str.rstrip()
 
+    
     # Cortando la dataframe de ratings a 1167(cantidad de columnas sql)
     #ratings = ratings.head(1167)
-    ratings = ratings.head(15000)
+    ratings = ratings.head(1000000)
 
     data = pd.merge(animes,ratings)
 
     # Agregramos el anime_id por que name a la hora de crear la tabla da problemas de duplicidad (64 caracteres sql)
-    userRatings = data.pivot_table(index = ['user_id'], columns = ['anime_id'], values = 'rating')
+    userRatings = data.pivot_table(index = ['user_id'], columns = ['name'], values = 'rating')
 
     corrMatrix = userRatings.corr(method='pearson', min_periods=5)
 
     # Se crea la tabla anime siempre, ya que lo remplaza siempre
     corrMatrix.to_sql('anime', con=engine,if_exists='replace')
-
+    
     
     return 'Success!'
     
-@app.route('/animes/recomendar', methods=['GET'])
+@app.route('/animes/recomendar/', methods=['GET'])
 
 def animes_recomendados():
-    #cur = mysql.connection.cursor()
-    #corrMatrix = cur.execute("SELECT * FROM anime")
-    #anime = int(input("ID Anime: "))
-    #calificacion = int(input("Calificación: "))
-    table = Table('anime', metadata, autoload = True, autoload_with = engine)
-    stmt = select([table])
-    """results = connection.execute(stmt).fetchall()
-    for result in results:
-        print(result)"""
+    anime = req.args.get('anime')
+    rating = req.args.get('rating')
+    rating = int(rating)
 
-    """sim_candidates = pd.Series()
+    corrMatrix = pd.read_sql_table('anime', 'mysql+pymysql://root:password@localhost/anime')  
+    #print(corrMatrix)
 
-    sims = corrMatrix[request.args['anime']].dropna()
-    sims = sims.map(lambda x: x * request.args['calificacion'])
-    sim_candidates = sim_candidates.append(sims)
+    simCandidates = pd.Series()
+    # #print(simCandidates)
+    # # Recuperar las pelis similares a las calificadas
+    # print(corrMatrix[anime])
+    sims = corrMatrix[anime].dropna()
+    # print(sims[0])
+    # # Escalar la similaridad multiplicando por la calificación de la persona
+    sims = sims.map(lambda x: x * rating)
+    # # Añadir el puntaje a la lista de candidatos similares
+    simCandidates = simCandidates.append(sims) 
+    # #Mirar los resultados:
+    # #print ("ordenando...")
+    simCandidates.sort_values(inplace = True, ascending = False)
+    #print(type(simCandidates))
 
-    sim_candidates = sim_candidates.groupby(sim_candidates.index()).sum()
-    sim_candidates.sort_values(inplace=True, ascending = False)
-    filtered_sims = sim_candidates.drop(request.args['anime'], errors = 'ignore')"""
+    simCandidates = simCandidates.groupby(simCandidates.index).sum()
+    simCandidates.sort_values(inplace = True, ascending = False)
+    #print(simCandidates.head(10))
 
-    return "Hola"
+    #print(myRatings)
+    filteredSims = simCandidates.drop(anime,errors='ignore')
+    #print(type(filteredSims))
+    print(filteredSims.head(10))
+    #lista = filteredSims.keys()
+    #lista = filteredSims.values.tolist()
+    #print(lista)
+    return jsonify({"Anime": "Nombre: "+ anime +" "+"rating: "+ str(rating)})
