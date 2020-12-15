@@ -49,13 +49,11 @@ def animes_recomendados():
     rating = req.args.get('rating')
     rating = int(rating)
 
-    corrMatrix = pd.read_sql_table('anime', 'mysql+pymysql://root:password@localhost/anime')  
-    #print(corrMatrix)
-
+    corrMatrix = pd.read_sql_table('anime', 'mysql+pymysql://root:password@localhost/anime', index_col=['name'])  
+    
     simCandidates = pd.Series()
     # #print(simCandidates)
     # # Recuperar las pelis similares a las calificadas
-    # print(corrMatrix[anime])
     sims = corrMatrix[anime].dropna()
     # print(sims[0])
     # # Escalar la similaridad multiplicando por la calificación de la persona
@@ -74,8 +72,8 @@ def animes_recomendados():
     #print(myRatings)
     filteredSims = simCandidates.drop(anime,errors='ignore')
     #print(type(filteredSims))
-    print(filteredSims.head(10))
-    #lista = filteredSims.keys()
-    #lista = filteredSims.values.tolist()
-    #print(lista)
-    return jsonify({"Anime": "Nombre: "+ anime +" "+"rating: "+ str(rating)})
+    filteredSims = filteredSims.head()
+    print(filteredSims.head())
+    result = filteredSims.to_dict()
+    
+    return jsonify(result)
